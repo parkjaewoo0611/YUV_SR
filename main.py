@@ -1,11 +1,9 @@
-import model
-import tensorflow as tf
-import model
+from model import *
 import cv2
 #TODO: data input
 
 sess = tf.InteractiveSession()
 
 def main():
-    NN = model.CbCrSRNN()
+    NN = CbCrSRNN()
     cv2.imread()
