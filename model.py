@@ -3,8 +3,10 @@ from ops import *
 
 sess = tf.InteractiveSession()
 
+init = tf.initialize_all_variables()
+sess.run(init)
 
-class CbCrSRNN:
+class CbCrSRNN():
     # 5x5 64개, 3x3 32개, 3x3 (2^2)x2개 - 2
     W = 1920
     H = 1080
@@ -24,6 +26,8 @@ class CbCrSRNN:
         self.w2 = tf.Variable(trunc_normal([32, 3, 3, 8]))
         self.b2 = tf.Variable(trunc_normal([8]))
 
+
+    def train(self, x_i, y_i):
         self.h0 = conv2d(self.x_input, self.w0, self.b0, activation="tanh")
         self.h1 = conv2d(self.h0, self.w1, self.b1, activation="tanh")
         self.h2 = conv2d(self.h1, self.w2, self.b2)
@@ -32,9 +36,6 @@ class CbCrSRNN:
 
         self.loss = tf.losses.mean_squared_error(self.y, self.y_target)
         self.opt = tf.train.AdamOptimizer(self.learning_rate).minimize(self.loss)
-
-
-
-    def train(self, x_i, y_i):
         error, _ = sess.run([self.loss, self.opt], feed_dict={self.x_input: x_i, self.y_target: y_i})
         return error
+

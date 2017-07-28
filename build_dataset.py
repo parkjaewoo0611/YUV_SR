@@ -21,26 +21,16 @@ def _image_preprocessing(filename, xsize, ysize):
 
 if __name__ == '__main__':
     pathA = sys.argv[1]
-    pathB = sys.argv[2]
     namesA = []
-    namesB = []
 
     for name in os.listdir(pathA):
         namesA.append(os.path.join(pathA, name))
 
-    for name in os.listdir(pathB):
-        namesB.append(os.path.join(pathB, name))
 
     dataset_A = np.zeros((len(namesA), 256, 256, 3))
-    dataset_B = np.zeros((len(namesB), 256, 256, 3))
 
     for i in range(len(namesA)):
         dataset_A[i] = _image_preprocessing(namesA[i], 256, 256)
         print(namesA[i])
 
-    for i in range(len(namesB)):
-        dataset_B[i] = _image_preprocessing(namesB[i], 256, 256)
-        print(namesB[i])
-
-    np.save('dataset_%s.npy' % sys.argv[3], dataset_A)
-    np.save('dataset_%s.npy' % sys.argv[4], dataset_B)
+    np.save('%s.npy' % sys.argv[2], dataset_A)
