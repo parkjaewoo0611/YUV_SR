@@ -20,7 +20,7 @@ def main():
     # print(Training)
     init = tf.initialize_all_variables()
     sess.run(init)
-    print(NN.train(NN, x_i=im2, y_i=im))
+    print(NN.train(NN, ))
 
 
 
