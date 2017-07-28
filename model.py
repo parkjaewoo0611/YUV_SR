@@ -3,6 +3,7 @@ from ops import *
 
 sess = tf.InteractiveSession()
 
+
 class CbCrSRNN:
     # 5x5 64개, 3x3 32개, 3x3 (2^2)x2개 - 2
     W = 1920
@@ -27,7 +28,7 @@ class CbCrSRNN:
         self.h1 = conv2d(self.h0, self.w1, self.b1, activation="tanh")
         self.h2 = conv2d(self.h1, self.w2, self.b2)
 
-        self.y = self.PS(self.h2, self.r)
+        self.y = PS(self.h2, self.r)
 
         self.loss = tf.losses.mean_squared_error(self.y, self.y_target)
         self.opt = tf.train.AdamOptimizer(self.learning_rate).minimize(self.loss)
