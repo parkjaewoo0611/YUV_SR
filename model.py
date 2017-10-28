@@ -12,13 +12,22 @@ class CbCrSRNN(object):
         self.y = tf.placeholder(tf.float32, name='y')
 
         with tf.variable_scope('conv1') as scope:
-            self.w_conv1, self.b_conv1 = conv_variable([5, 5, 2, 64], 'conv1')
+            self.w_conv1, self.b_conv1 = conv_variable([7, 7, 2, 32], 'conv1')
 
         with tf.variable_scope('conv2') as scope:
-            self.w_conv2, self.b_conv2 = conv_variable([3, 3, 64, 32], 'conv2')
+            self.w_conv2, self.b_conv2 = conv_variable([5, 5, 32, 64], 'conv2')
 
         with tf.variable_scope('conv3') as scope:
-            self.w_conv3, self.b_conv3 = conv_variable([3, 3, 32, 8], 'conv3')
+            self.w_conv3, self.b_conv3 = conv_variable([5, 5, 64, 64], 'conv3')
+
+        with tf.variable_scope('conv4') as scope:
+            self.w_conv4, self.b_conv4 = conv_variable([5, 5, 64, 64], 'conv4')
+
+        with tf.variable_scope('conv5') as scope:
+            self.w_conv5, self.b_conv5 = conv_variable([5, 5, 64, 32], 'conv5')
+
+        with tf.variable_scope('conv6') as scope:
+            self.w_conv6, self.b_conv6 = conv_variable([5, 5, 32, 8], 'conv6')
 
         h1 = conv2d(self.x, self.w_conv1, self.b_conv1)
 
@@ -30,9 +39,21 @@ class CbCrSRNN(object):
 
         h3 = conv2d(h2_relu, self.w_conv3, self.b_conv3)
 
-        self.test_result = h3
+        h3_relu = relu(h3)
 
-        self.im_result = PS(h3, 2)
+        h4 = conv2d(h3_relu, self.w_conv4, self.b_conv4)
+
+        h4_relu = relu(h4)
+
+        h5 = conv2d(h4_relu, self.w_conv5, self.b_conv5)
+
+        h5_relu = relu(h5)
+
+        h6 = conv2d(h5_relu, self.w_conv6, self.b_conv6)
+
+        self.test_result = h6
+
+        self.im_result = PS(h6, 2)
 
         self.loss = tf.reduce_mean(tf.nn.l2_loss(self.im_result - self.y, name='loss'))
         tf.summary.scalar("loss", self.loss)
